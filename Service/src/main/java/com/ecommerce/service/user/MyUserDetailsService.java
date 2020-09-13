@@ -28,7 +28,7 @@ public class MyUserDetailsService implements UserDetailsService {
 		user.setLastLogin(Timestamp.valueOf(LocalDateTime.now()));
 		repo.save(user);
 		
-		return new MyUserDetailsImpl(user);
+		return new MyUserDetailsImpl(user.getUsername(), user.getPassword(), user.isEnabled(), user.isAccountNonExpired(), user.isCredentialsNonExpired(), user.isAccountNonLocked(), user.getAuthorities());
 	}
 
 }

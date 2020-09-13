@@ -42,18 +42,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		http
 			.authorizeRequests()
-				.antMatchers("/logout").fullyAuthenticated()
+				.antMatchers("/account/logout", "/account/change-password", "/account/change-username").fullyAuthenticated()
 				.antMatchers("/account/login", "/account/register").anonymous()
-				.antMatchers("/").permitAll()
+				.antMatchers("/", "/account/is-username-taken").permitAll()
 				.antMatchers("/h2-console/**").hasAuthority("ADMIN")
 			.and()
 			.csrf().ignoringAntMatchers("/h2-console/**")
 			.and()
 			.formLogin().loginPage("/account/login")
 			.and()
-			.logout().invalidateHttpSession(true).clearAuthentication(true)
-			.logoutRequestMatcher(new AntPathRequestMatcher("/account/logout"))
-			.logoutSuccessUrl("/")
+			.logout()
+				.invalidateHttpSession(true)
+				.clearAuthentication(true)
+				.logoutRequestMatcher(new AntPathRequestMatcher("/account/logout"))
+				.logoutSuccessUrl("/")
+				.deleteCookies("JSESSIONID") 
 			.and().headers().frameOptions().disable();
 	}
 }

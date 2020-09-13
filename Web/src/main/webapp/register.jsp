@@ -11,7 +11,7 @@
 					</p>
 
 					<form action='/account/register' method='post'
-						onSubmit="return beforeSubmit()" class="form-horizontal"
+						onSubmit="return validate()" class="form-horizontal"
 						enctype="multipart/form-data">
 						<input type="hidden" name="${_csrf.parameterName}"
 							value="${_csrf.token}" />
@@ -42,7 +42,6 @@
 						<button id="submit" type="submit"
 							class="btn btn-primary waves-effect waves-light">
 							Register</button>
-
 					</form>
 				</div>
 			</div>
@@ -50,4 +49,7 @@
 	</div>
 </main>
 <%@include file="Common/Scripts.jsp"%>
+<script type="text/javascript" src="/Static/JavaScripts/userCheck.js"></script>
+<script type="text/javascript" src="/Static/JavaScripts/passwdCheck.js"></script>
+<script type="text/javascript" src="/Static/JavaScripts/registerValidation.js"></script>
 <%@include file="Common/Footer.jsp"%>

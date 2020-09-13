@@ -12,10 +12,9 @@
 					</p>
 					<form action='/account/login' method='post' class="form-horizontal">
 						<input type="hidden" name="${_csrf.parameterName}"
-							value="${_csrf.token}" /> <span><h3>Account Login</h3></span> <span><h5
-								id="logOut"></h5></span>
+							value="${_csrf.token}" /> <span><h3>Account Login</h3></span>
 						<div class="form-group">
-							<label class="col-sm-2 control-label" align="right">
+							<label class="col-sm-2 control-label" align="left">
 								Username: </label>
 							<div class="col-sm-12">
 								<input class="form-control" id="username" type="text" name="username"
@@ -23,7 +22,7 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-2 control-label" align="right">
+							<label class="col-sm-2 control-label" align="left">
 								Password: </label>
 							<div class="col-sm-12">
 								<input class="form-control" id="password" type="password"

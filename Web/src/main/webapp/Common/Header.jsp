@@ -10,7 +10,7 @@
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-<link rel='icon' href="Static/Images/favicon.ico" type='image/x-icon' />
+<link rel='icon' href="/Static/Images/favicon.ico" type='image/x-icon' />
 <title>${title}</title>
 <!-- Font Awesome -->
 <link rel="stylesheet"
@@ -26,7 +26,7 @@
 <link
 	href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.0/css/mdb.min.css"
 	rel="stylesheet">
-<link href="Static/CSS/booths.css" rel="stylesheet">
+<link href="/Static/CSS/booths.css" rel="stylesheet">
 <style type="text/css">
 html, body, header, .carousel {
 	height: 60vh;

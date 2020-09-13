@@ -41,9 +41,8 @@
             <li><div class="dropdown">
               <a class="dropbtn clearfix d-none d-sm-inline-block"><% out.print(request.getUserPrincipal().getName()); %> </a>
               <div class="dropdown-content">
-                <a href="/account/profileView">View Profile</a>
-                <a href="/account/profileEdit">Edit Profile</a>
-                <a href="/account/changePasswd">Change Password</a>
+                <a href="/account/change-username">Change username</a>
+                <a href="/account/change-password">Change password</a>
               </div>
             </div></li>
           <li class="nav-item">
