@@ -1,10 +1,13 @@
-package com.ecommerce.models;
+package com.ecommerce.models.Account;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,7 +18,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.ecommerce.models.Items.Order;
+import com.ecommerce.models.Items.OrderItem;
+
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 
 @Entity
@@ -41,19 +48,28 @@ public class User implements UserDetails{
 	@Column(name = "isAdmin", nullable = false)
 	private Boolean isAdmin;
 	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private Set<OrderItem> userOrderItems;
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private Set<Order> orders;
+	
 	@Override
 	public String toString() {
 		return "User [getId()=" + getId() + ", getUsername()=" + getUsername() + "]";
 	}
 
 	public User(String username, String password) {
-		super();
+		userOrderItems = new HashSet<OrderItem>();
+		orders = new HashSet<Order>();
 		this.username = username;
 		this.password = password;
 		this.isAdmin = false;
 	}
 
 	public User() {
+		userOrderItems = new HashSet<OrderItem>();
+		orders = new HashSet<Order>();
 	}
 
 	public Integer getId() {
@@ -98,7 +114,7 @@ public class User implements UserDetails{
 	public void setDateJoined() {
 		this.dateJoined = Timestamp.valueOf(LocalDateTime.now());
 	}
-	
+
 	public Boolean getIsAdmin() {
 		return isAdmin;
 	}
@@ -134,6 +150,22 @@ public class User implements UserDetails{
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
 		return true;
+	}
+
+	public Set<OrderItem> getUserOrderItems() {
+		return userOrderItems;
+	}
+
+	public void addUserOrderItem(OrderItem userOrderItem) {
+		userOrderItems.add(userOrderItem);
+	}
+
+	public Set<Order> getOrders() {
+		return orders;
+	}
+
+	public void addOrder(Order order) {
+		orders.add(order);
 	}
 
 }
