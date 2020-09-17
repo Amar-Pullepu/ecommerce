@@ -35,9 +35,8 @@ public class SubCategory {
 		items = new HashSet<Item>();
 	}
 
-	public SubCategory(Integer id, String subCategory, Category category) {
+	public SubCategory(String subCategory, Category category) {
 		items = new HashSet<Item>();
-		Id = id;
 		SubCategory = subCategory;
 		this.category = category;
 	}
@@ -45,11 +44,7 @@ public class SubCategory {
 	public Integer getId() {
 		return Id;
 	}
-
-	public void setId(Integer id) {
-		Id = id;
-	}
-
+	
 	public String getSubCategory() {
 		return SubCategory;
 	}
@@ -72,6 +67,10 @@ public class SubCategory {
 	
 	public Set<Item> getItems(){
 		return items;
+	}
+	
+	public String toString() {
+		return this.SubCategory;
 	}
 	
 }

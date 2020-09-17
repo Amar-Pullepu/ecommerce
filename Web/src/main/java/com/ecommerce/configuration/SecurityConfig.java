@@ -45,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/account/logout", "/account/change-password", "/account/change-username").fullyAuthenticated()
 				.antMatchers("/account/login", "/account/register").anonymous()
 				.antMatchers("/", "/account/is-username-taken").permitAll()
-				.antMatchers("/h2-console/**").hasAuthority("ADMIN")
+				.antMatchers("/h2-console/**", "/admin/**").hasAuthority("ADMIN")
 			.and()
 			.csrf().ignoringAntMatchers("/h2-console/**")
 			.and()

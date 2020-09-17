@@ -9,9 +9,9 @@
 					<form action='/account/change-username' method='post'
 						onSubmit="return validate()" class="form-horizontal">
 						<input type="hidden" name="${_csrf.parameterName}"
-							value="${_csrf.token}" /> <span><h3>Change Username</h3></span>
+							value="${_csrf.token}" /> <div><h3>Change Username</h3></div>
 						<div class="form-group">
-							<label class="col-sm-6 control-label" align="left">
+							<label class="col-sm-6 control-label" style="aligin:left">
 								Current Username: </label>
 							<div class="col-sm-12">
 								<input class="form-control" id="currusername" type="text"
@@ -21,7 +21,7 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-6 control-label" align="left"> New
+							<label class="col-sm-6 control-label" style="aligin:left"> New
 								Username: </label>
 							<div class="col-sm-12">
 								<input class="form-control" id="username" type="text"

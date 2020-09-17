@@ -10,9 +10,9 @@
 						onSubmit="return validate()" class="form-horizontal">
 						<input type="hidden" name="${_csrf.parameterName}"
 							value="${_csrf.token}" /> 
-						<span><h3>Change Password</h3></span>
+						<div><h3>Change Password</h3></div>
 						<div class="form-group">
-							<label class="col-sm-6 control-label" align="left">
+							<label class="col-sm-6 control-label" style="aligin:left">
 								Current Password: </label>
 							<div class="col-sm-12">
 								<input class="form-control" id="oldPasswd" type="password" name="oldPasswd"
@@ -20,7 +20,7 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-6 control-label" align="left">
+							<label class="col-sm-6 control-label" style="aligin:left">
 								New Password: </label>
 							<div class="col-sm-12">
 								<input class="form-control" id="password" type="password"
@@ -28,7 +28,7 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-6	 control-label" align="left">
+							<label class="col-sm-6	 control-label" style="aligin:left">
 								Re-enter New Password: </label>
 							<div class="col-sm-12">
 								<input class="form-control" id="repassword" type="password"

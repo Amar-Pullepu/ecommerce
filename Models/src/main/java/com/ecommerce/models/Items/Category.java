@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.PostPersist;
 import javax.persistence.Table;
 
 
@@ -24,20 +25,15 @@ public class Category {
 	@Column(name = "category", unique = true, nullable = false)
 	private String Category;
 	
-	@Column(name = "image_url", unique = true, nullable = false)
+	@Column(name = "image_url", unique = true)
 	private String ImageUrl;
-	
-	@Column(name = "sulg", unique = true, nullable = false)
-	private String Slug;
 	
 	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
 	private Set<SubCategory> subCategories;
 	
-	public Category(String category, String imageUrl, String slug) {
+	public Category(String category) {
 		subCategories = new HashSet<SubCategory>();
 		Category = category;
-		ImageUrl = imageUrl;
-		Slug = slug;
 	}
 
 	public Category() {
@@ -46,10 +42,6 @@ public class Category {
 	
 	public Integer getId() {
 		return Id;
-	}
-
-	public void setId(Integer id) {
-		Id = id;
 	}
 
 	public String getCategory() {
@@ -64,16 +56,9 @@ public class Category {
 		return ImageUrl;
 	}
 
-	public void setImageUrl(String imageUrl) {
-		ImageUrl = imageUrl;
-	}
-
-	public String getSlug() {
-		return Slug;
-	}
-
-	public void setSlug(String slug) {
-		Slug = slug;
+	@PostPersist
+	public void setImageUrl() {
+		ImageUrl = "/Static/Images/Category/"+this.Id+".jpg";
 	}
 
 	public void addSubCategory(SubCategory subCategory) {
@@ -82,6 +67,10 @@ public class Category {
 	
 	public Set<SubCategory> getItems(){
 		return subCategories;
+	}
+	
+	public String toString() {
+		return this.Category;
 	}
 	
 }

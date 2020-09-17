@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PostPersist;
 import javax.persistence.Table;
 
 @Entity
@@ -28,10 +29,7 @@ public class Item {
 	@Column(name = "description", nullable = true)
 	private String Descrition;
 	
-	@Column(name = "slug", unique = true, nullable = false)
-	private String Slug;
-	
-	@Column(name = "image_url", unique = true, nullable = false)
+	@Column(name = "image_url", unique = true)
 	private String ImageUrl;
 	
 	@Column(name = "price", nullable = false)
@@ -48,13 +46,10 @@ public class Item {
 		orderItems = new HashSet<OrderItem>();
 	}
 
-	public Item(Integer id, String title, String descrition, String slug, String imageUrl, SubCategory subCategory, Double price) {
+	public Item(String title, String descrition, SubCategory subCategory, Double price) {
 		orderItems = new HashSet<OrderItem>();
-		Id = id;
 		Title = title;
 		Descrition = descrition;
-		Slug = slug;
-		ImageUrl = imageUrl;
 		this.subCategory = subCategory;
 		Price = price;
 	}
@@ -62,11 +57,7 @@ public class Item {
 	public Integer getId() {
 		return Id;
 	}
-
-	public void setId(Integer id) {
-		Id = id;
-	}
-
+	
 	public String getTitle() {
 		return Title;
 	}
@@ -83,20 +74,13 @@ public class Item {
 		Descrition = descrition;
 	}
 
-	public String getSlug() {
-		return Slug;
-	}
-
-	public void setSlug(String slug) {
-		Slug = slug;
-	}
-
 	public String getImageUrl() {
 		return ImageUrl;
 	}
 
-	public void setImageUrl(String imageUrl) {
-		ImageUrl = imageUrl;
+	@PostPersist
+	public void setImageUrl() {
+		ImageUrl = "/Static/Images/Item/"+Id+".jpg";
 	}
 
 	public SubCategory getSubCategory() {
@@ -121,6 +105,10 @@ public class Item {
 
 	public void addOrderItems(OrderItem orderItem) {
 		orderItems.add(orderItem);
+	}
+	
+	public String toString() {
+		return this.Title;
 	}
 	
 }

@@ -1,6 +1,7 @@
 package com.ecommerce.models.Items;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import com.ecommerce.models.Account.User;
@@ -32,7 +34,7 @@ public class Order {
 	@Column(name = "start_date", nullable = false)
 	private Timestamp StartDate;
 	
-	@Column(name = "order_date", nullable = true)
+	@Column(name = "order_date")
 	private Timestamp OrderDate;
 
 	@Column(name = "ordered", nullable = false)
@@ -51,13 +53,10 @@ public class Order {
 		orderItems = new HashSet<OrderItem>();
 	}
 
-	public Order(Integer id, User user, Timestamp startDate, Timestamp orderDate, Boolean ordered, Double totalAmount,
+	public Order(User user, Boolean ordered, Double totalAmount,
 			Double amountSaved) {
 		orderItems = new HashSet<OrderItem>();
-		Id = id;
 		this.user = user;
-		StartDate = startDate;
-		OrderDate = orderDate;
 		Ordered = ordered;
 		TotalAmount = totalAmount;
 		AmountSaved = amountSaved;
@@ -83,8 +82,9 @@ public class Order {
 		return StartDate;
 	}
 
-	public void setStartDate(Timestamp startDate) {
-		StartDate = startDate;
+	@PrePersist
+	public void setStartDate() {
+		StartDate = Timestamp.valueOf(LocalDateTime.now());
 	}
 
 	public Timestamp getOrderDate() {
@@ -125,6 +125,10 @@ public class Order {
 
 	public void addOrderItem(OrderItem orderItem) {
 		orderItems.add(orderItem);
+	}
+	
+	public String toString() {
+		return this.user.toString()+" - "+this.Id;
 	}
 
 }

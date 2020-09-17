@@ -29,6 +29,8 @@ import javax.persistence.PrePersist;
 @Table(name = "users")
 public class User implements UserDetails{
 	
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer Id;
@@ -53,10 +55,10 @@ public class User implements UserDetails{
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private Set<Order> orders;
-	
-	@Override
-	public String toString() {
-		return "User [getId()=" + getId() + ", getUsername()=" + getUsername() + "]";
+
+	public User() {
+		userOrderItems = new HashSet<OrderItem>();
+		orders = new HashSet<Order>();
 	}
 
 	public User(String username, String password) {
@@ -65,11 +67,6 @@ public class User implements UserDetails{
 		this.username = username;
 		this.password = password;
 		this.isAdmin = false;
-	}
-
-	public User() {
-		userOrderItems = new HashSet<OrderItem>();
-		orders = new HashSet<Order>();
 	}
 
 	public Integer getId() {
@@ -130,25 +127,21 @@ public class User implements UserDetails{
 
 	@Override
 	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
@@ -166,6 +159,11 @@ public class User implements UserDetails{
 
 	public void addOrder(Order order) {
 		orders.add(order);
+	}
+	
+	@Override
+	public String toString() {
+		return this.username;
 	}
 
 }

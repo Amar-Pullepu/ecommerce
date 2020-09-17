@@ -48,9 +48,8 @@ public class OrderItem {
 	
 	
 
-	public OrderItem(Integer id, Item item, User user, Boolean ordered, Integer quantity, Double price,
+	public OrderItem(Item item, User user, Boolean ordered, Integer quantity, Double price,
 			Double discountedPrice, Order order) {
-		Id = id;
 		this.item = item;
 		this.user = user;
 		Ordered = ordered;
@@ -125,5 +124,9 @@ public class OrderItem {
 
 	public void setOrder(Order order) {
 		this.order = order;
+	}
+	
+	public String toString() {
+		return this.item.toString()+" - "+this.Id;
 	}
 }
