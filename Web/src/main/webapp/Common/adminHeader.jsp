@@ -52,9 +52,9 @@
                     
                 
                 
-                <a href="/admin/password_change/">Change password</a> /
+                <a href="/account/change-password">Change password</a> /
                 
-                <a href="/admin/logout/">Log out</a>
+                <a href="/account/logout">Log out</a>
             
         </div>
         

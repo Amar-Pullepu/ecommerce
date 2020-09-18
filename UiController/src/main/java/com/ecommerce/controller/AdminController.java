@@ -1,7 +1,5 @@
 package com.ecommerce.controller;
 
-import java.util.Arrays;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 
@@ -155,9 +153,10 @@ public class AdminController {
 			String name = req.getParameter("Title");
 			String desc = req.getParameter("Descrition");
 			Double price = Double.parseDouble(req.getParameter("Price"));
+			Double dPrice = Double.parseDouble(req.getParameter("DiscountPrice"));
 			SubCategory subCategory = subCategoryRepository.findById(Integer.parseInt(req.getParameter("subCategory")))
 					.get();
-			Item item = new Item(name, desc, subCategory, price);
+			Item item = new Item(name, desc, subCategory, price, dPrice);
 			itemRepository.save(item);
 			itemRepository.save(item);// Don't remove this cause imageurl is named after it's Id value which will be
 										// generated after the object is persisted.
@@ -191,6 +190,137 @@ public class AdminController {
 			SubCategory subCategory = new SubCategory(name, category);
 			subCategoryRepository.save(subCategory);
 		} else
+			return mv;
+		mv.setViewName("redirect:/admin/" + entity);
+		return mv;
+	}
+
+	@GetMapping(name = "Change_Entity", value = "/{entity}/{id}/change")
+	public ModelAndView changeEntity(@PathVariable(name = "entity") String entity, @PathVariable(name = "id") int id) {
+		ModelAndView mv = new ModelAndView();
+		if (entity.equals(objects[0])) {
+			mv.addObject("dataTypes", utils.getTypes(Category.class.getDeclaredFields()));
+			mv.addObject("dataValues", utils.getValues(categoryRepository.findById(id).get()));
+		} else if (entity.equals(objects[1])) {
+			mv.addObject("dataTypes", utils.getTypes(Item.class.getDeclaredFields()));
+			mv.addObject("subCategory", subCategoryRepository.findAll().iterator());
+			mv.addObject("dataValues", utils.getValues(itemRepository.findById(id).get()));
+		} else if (entity.equals(objects[2])) {
+			mv.addObject("dataTypes", utils.getTypes(Order.class.getDeclaredFields()));
+			mv.addObject("user", userRepository.findAll().iterator());
+			mv.addObject("dataValues", utils.getValues(orderRepository.findById(id).get()));
+		} else if (entity.equals(objects[3])) {
+			mv.addObject("dataTypes", utils.getTypes(OrderItem.class.getDeclaredFields()));
+			mv.addObject("item", itemRepository.findAll().iterator());
+			mv.addObject("user", userRepository.findAll().iterator());
+			mv.addObject("order", orderRepository.findAll().iterator());
+			mv.addObject("dataValues", utils.getValues(orderItemRepository.findById(id).get()));
+		} else if (entity.equals(objects[4])) {
+			mv.addObject("dataTypes", utils.getTypes(SubCategory.class.getDeclaredFields()));
+			mv.addObject("category", categoryRepository.findAll().iterator());
+			mv.addObject("dataValues", utils.getValues(subCategoryRepository.findById(id).get()));
+		} else
+			return mv;
+		mv.addObject("entity", entity);
+		mv.addObject("id", id);
+		mv.addObject("title", "Change " + entity);
+		mv.setViewName("adminChangeEntity");
+		return mv;
+	}
+
+	@PostMapping(name = "admin_change_entity", value = "/{entity}/{id}/change")
+	public ModelAndView postChangeItem(@PathVariable(name = "entity") String entity, @PathVariable(name = "id") int id,
+			HttpServletRequest req) {
+		ModelAndView mv = new ModelAndView();
+		if (entity.equals(objects[0])) {
+			String name = req.getParameter("Category");
+			Category category = categoryRepository.findById(id).get();
+			category.setCategory(name);
+			categoryRepository.save(category);
+			try {
+				Part img = req.getPart("ImageUrl");
+				if (img != null)
+					utils.saveImage(img, category.getImageUrl());
+			} catch (Exception e) {
+				categoryRepository.delete(category);
+				e.printStackTrace();
+			}
+		} else if (entity.equals(objects[1])) {
+			String name = req.getParameter("Title");
+			String desc = req.getParameter("Descrition");
+			Double price = Double.parseDouble(req.getParameter("Price"));
+			Double dPrice = Double.parseDouble(req.getParameter("DiscountPrice"));
+			SubCategory subCategory = subCategoryRepository.findById(Integer.parseInt(req.getParameter("subCategory")))
+					.get();
+			Item item = itemRepository.findById(id).get();
+			item.setTitle(name);
+			item.setDescrition(desc);
+			item.setPrice(price);
+			item.setDiscountPrice(dPrice);
+			itemRepository.save(item);
+			try {
+				Part img = req.getPart("ImageUrl");
+				if (img != null)
+					utils.saveImage(img, item.getImageUrl());
+			} catch (Exception e) {
+				itemRepository.delete(item);
+				e.printStackTrace();
+			}
+		} else if (entity.equals(objects[3])) {
+			Double dPrice = Double.parseDouble(req.getParameter("DiscountedPrice"));
+			Double price = Double.parseDouble(req.getParameter("Price"));
+			Integer quantity = new Double(req.getParameter("Quantity")).intValue();
+			boolean ordered = !(req.getParameter("Ordered") == null);
+			User user = userRepository.findById(Integer.parseInt(req.getParameter("user"))).get();
+			Order order = orderRepository.findById(Integer.parseInt(req.getParameter("order"))).get();
+			Item item = itemRepository.findById(Integer.parseInt(req.getParameter("item"))).get();
+			OrderItem orderItem = orderItemRepository.findById(id).get();
+			orderItem.setDiscountedPrice(dPrice);
+			orderItem.setItem(item);
+			orderItem.setOrder(order);
+			orderItem.setOrdered(ordered);
+			orderItem.setPrice(price);
+			orderItem.setQuantity(quantity);
+			orderItem.setUser(user);
+			orderItemRepository.save(orderItem);
+		} else if (entity.equals(objects[2])) {
+			User user = userRepository.findById(Integer.parseInt(req.getParameter("user"))).get();
+			boolean ordered = !(req.getParameter("Ordered") == null);
+			Double totalAmount = Double.parseDouble(req.getParameter("TotalAmount"));
+			Double amountSaved = Double.parseDouble(req.getParameter("AmountSaved"));
+			Order order = orderRepository.findById(id).get();
+			order.setAmountSaved(amountSaved);
+			order.setOrdered(ordered);
+			order.setTotalAmount(totalAmount);
+			order.setUser(user);
+			orderRepository.save(order);
+		} else if (entity.equals(objects[4])) {
+			String name = req.getParameter("SubCategory");
+			Category category = categoryRepository.findById(Integer.parseInt(req.getParameter("category"))).get();
+			SubCategory subCategory = subCategoryRepository.findById(id).get();
+			subCategory.setSubCategory(name);
+			subCategory.setCategory(category);
+			subCategoryRepository.save(subCategory);
+		} else
+			return mv;
+		mv.setViewName("redirect:/admin/" + entity);
+		return mv;
+	}
+	@PostMapping(name = "admin_delete_entity", value = "/{entity}/{id}/delete")
+	public ModelAndView postDeleteItem(@PathVariable(name = "entity") String entity, @PathVariable(name = "id") int id) {
+		
+		ModelAndView mv = new ModelAndView();
+		if (entity.equals(objects[0]))
+			categoryRepository.deleteById(id);
+		else if (entity.equals(objects[1]))
+			itemRepository.deleteById(id);
+		else if (entity.equals(objects[2]))
+			orderRepository.deleteById(id);
+		else if (entity.equals(objects[3]))
+			orderItemRepository.deleteById(id);
+		else if (entity.equals(objects[4]))
+			subCategoryRepository.deleteById(id);
+		else
 			return mv;
 		mv.setViewName("redirect:/admin/" + entity);
 		return mv;

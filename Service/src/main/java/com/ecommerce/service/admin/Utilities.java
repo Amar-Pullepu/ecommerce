@@ -15,6 +15,12 @@ import javax.servlet.http.Part;
 
 import org.springframework.stereotype.Component;
 
+import com.ecommerce.models.Items.Category;
+import com.ecommerce.models.Items.Item;
+import com.ecommerce.models.Items.Order;
+import com.ecommerce.models.Items.OrderItem;
+import com.ecommerce.models.Items.SubCategory;
+
 @Component
 public class Utilities {
 	
@@ -46,5 +52,51 @@ public class Utilities {
         while ((read = imgContent.read(bytes)) != -1) {
             iOut.write(bytes, 0, read);
         }
+	}
+	
+	public Map<String, String> getValues(Category category){
+		Map<String, String> types = new HashMap<String, String>();
+		types.put("Category", category.getCategory());
+		types.put("ImageUrl", category.getImageUrl());
+		return types;
+	}
+	
+	public Map<String, String> getValues(Item item){
+		Map<String, String> types = new HashMap<String, String>();
+		types.put("Title", item.getTitle());
+		types.put("Descrition", item.getDescrition());
+		types.put("ImageUrl", item.getImageUrl());
+		types.put("Price", item.getPrice().toString());
+		types.put("subCategory", item.getSubCategory().getId().toString());
+		types.put("DiscountPrice", item.getDiscountPrice()==null?"0":item.getDiscountPrice().toString());
+		return types;
+	}
+	
+	public Map<String, String> getValues(Order order){
+		Map<String, String> types = new HashMap<String, String>();
+		types.put("user", order.getUser().getId().toString());
+		types.put("Ordered", order.getOrdered().toString());
+		types.put("AmountSaved", order.getAmountSaved().toString());
+		types.put("TotalAmount", order.getTotalAmount().toString());
+		return types;
+	}
+	
+	public Map<String, String> getValues(OrderItem orderItem){
+		Map<String, String> types = new HashMap<String, String>();
+		types.put("item", orderItem.getItem().getId().toString());
+		types.put("order", orderItem.getOrder().getId().toString());
+		types.put("user", orderItem.getUser().getId().toString());
+		types.put("Price", orderItem.getPrice().toString());
+		types.put("DiscountedPrice", orderItem.getDiscountedPrice().toString());
+		types.put("Quantity", orderItem.getQuantity().toString());
+		types.put("Ordered", orderItem.getOrdered().toString());
+		return types;
+	}
+	
+	public Map<String, String> getValues(SubCategory subCategory){
+		Map<String, String> types = new HashMap<String, String>();
+		types.put("SubCategory", subCategory.getSubCategory());
+		types.put("category", subCategory.getCategory().getId().toString());
+		return types;
 	}
 }

@@ -18,27 +18,30 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "Items")
 public class Item {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer Id;
-	
+
 	@Column(name = "title", nullable = false)
 	private String Title;
-	
+
 	@Column(name = "description", nullable = true)
 	private String Descrition;
-	
+
 	@Column(name = "image_url", unique = true)
 	private String ImageUrl;
-	
+
 	@Column(name = "price", nullable = false)
 	private Double Price;
-	
+
+	@Column(name = "discount_price")
+	private Double DiscountPrice;
+
 	@ManyToOne
 	@JoinColumn(name = "sub_category_id")
 	private SubCategory subCategory;
-	
+
 	@OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
 	private Set<OrderItem> orderItems;
 
@@ -46,18 +49,31 @@ public class Item {
 		orderItems = new HashSet<OrderItem>();
 	}
 
-	public Item(String title, String descrition, SubCategory subCategory, Double price) {
+	public Item(String title, String descrition, SubCategory subCategory, Double price, Double dPrice) {
 		orderItems = new HashSet<OrderItem>();
 		Title = title;
 		Descrition = descrition;
 		this.subCategory = subCategory;
 		Price = price;
+		DiscountPrice = dPrice;
+	}
+
+	public Double getDiscountPrice() {
+		return DiscountPrice;
+	}
+
+	public void setDiscountPrice(Double discountPrice) {
+		DiscountPrice = discountPrice;
+	}
+
+	public void setId(Integer id) {
+		Id = id;
 	}
 
 	public Integer getId() {
 		return Id;
 	}
-	
+
 	public String getTitle() {
 		return Title;
 	}
@@ -80,7 +96,7 @@ public class Item {
 
 	@PostPersist
 	public void setImageUrl() {
-		ImageUrl = "/Static/Images/Item/"+Id+".jpg";
+		ImageUrl = "/Static/Images/Item/" + Id + ".jpg";
 	}
 
 	public SubCategory getSubCategory() {
@@ -106,9 +122,9 @@ public class Item {
 	public void addOrderItems(OrderItem orderItem) {
 		orderItems.add(orderItem);
 	}
-	
+
 	public String toString() {
 		return this.Title;
 	}
-	
+
 }
